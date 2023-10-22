@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Cat.create(name: 'Grumpy Cat', photo_url: '../client/public/images/grumpycat.jpeg', alt: "Grumpy Cat")
+Cat.create(name: 'Happy Orange Kitty', photo_url: '../client/public/images/cute-orange-cat.jpg', alt: "Happy Orange Kitty")
+Cat.create(name: 'Embarassed Cat', photo_url: '../client/public/images/cute-embarassed-cat.jpg', alt: 'Embarassed Cat')
+Cat.create(name: 'Sphynx', photo_url: '../client/public/images/Sphynx.2.jpg', alt: 'Sphynx')
