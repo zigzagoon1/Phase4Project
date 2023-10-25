@@ -17,7 +17,7 @@ function NavBar() {
         </div>{" "}
         <div className="col-3 nav-item">
           <NavLink className="nav-link text-center" to="/memes">
-            Memes
+            My Memes
           </NavLink>
         </div>
       </div>

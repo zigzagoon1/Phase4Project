@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import CatImageCard from './CatImageCard'
 function CatImages() {
     //fetch cat images from /cats
     const [cats, setCats] = useState([])
@@ -10,14 +10,21 @@ function CatImages() {
                 r.json() 
                 .then((cats) => {
                     console.log(cats)
+                    setCats(cats)
                 })
             }
         })
 
-    })
+    }, [])
+
+    const catImagesElement = cats.map((cat) => {
+        return <CatImageCard key={cat.id} name={cat.name} src={cat.photo_url} alt={cat.alt}/>
+    });
 
     return(
-        <div>
+        <div className="container-flex">
+            {catImagesElement}
+            
             
         </div>
     )
