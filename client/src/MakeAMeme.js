@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {useLocation } from "react-router-dom";
 import Draggable from 'react-draggable';
 import { Button } from "react-bootstrap";
@@ -8,6 +8,9 @@ function MakeAMeme() {
 
   const { id, name, src} = location.state;
 
+  const imageRef = useRef(null);
+  const textRef = useRef(null);
+
   const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [selectedFont, setSelectedFont] = useState("Arial");
   const [content, setContent] = useState("Your Text Here");
@@ -15,7 +18,6 @@ function MakeAMeme() {
   const [fontSize, setFontSize] = useState(24);
   const [title, setTitle] = useState('');
 
-  console.log(currentUser)
   function handleFontChange(e) {
     setSelectedFont(e.target.value);
   }
@@ -36,8 +38,19 @@ function MakeAMeme() {
     setTitle(e.target.value)
   }
 
-  async function handleSubmit(e) {
+  function getTextCoords() {
+    const imageBounds = imageRef.current.getBoundingClientRect();
+    const textBounds = textRef.current.getBoundingClientRect();
+
+    const relativeX = textBounds.left - imageBounds.left;
+    const relativeY = textBounds.top - imageBounds.top;
+
+    return {x: relativeX, y: relativeY}
+  }
+
+  function handleSubmit(e) {
     e.preventDefault()
+    const coords = getTextCoords();
     const meme = {
         user_id: currentUser.id,
         cat_id: id,
@@ -45,10 +58,12 @@ function MakeAMeme() {
         content: content,
         font: selectedFont,
         font_color: color,
-        font_size: fontSize
-    }
+        font_size: fontSize, 
+        x_coord: coords.x,
+        y_coord: coords.y
+    };
     console.log(meme)
-    await fetch('/memes', {
+    fetch('/memes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -68,6 +83,7 @@ function MakeAMeme() {
         <h1 className="text-center">Make A Meme!</h1>
         <div className="imageContainer text-center col-8">
           <img
+            ref={imageRef}
             id="meme-maker-cat"
             className="col-6 m-auto p-auto"
             src={src}
@@ -76,6 +92,7 @@ function MakeAMeme() {
           <br></br>
           <Draggable className="" bounds=".imageContainer">
             <p
+              ref={textRef}
               id="overlay-text"
               className=""
               style={{
