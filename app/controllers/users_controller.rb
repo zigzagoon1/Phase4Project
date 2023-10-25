@@ -8,7 +8,7 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_response
 
     def show
         user = User.find_by(id: session[:user_id])
-        render json: user #,include: [:cats, :memes]
+        render json: user, include: [:cats, :memes]
     end
 
     def create

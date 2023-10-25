@@ -8,8 +8,9 @@ class CreateMemes < ActiveRecord::Migration[6.1]
       t.string :font
       t.string :font_color
       t.integer :font_size
-      t.integer :x_coord
-      t.integer :y_coord
+      t.integer :left_percent
+      t.integer :top_percent
+      t.string :photo_url
 
       t.timestamps
     end

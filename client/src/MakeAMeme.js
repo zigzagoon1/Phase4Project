@@ -10,6 +10,7 @@ function MakeAMeme() {
 
   const imageRef = useRef(null);
   const textRef = useRef(null);
+  const containerRef = useRef(null);
 
   const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [selectedFont, setSelectedFont] = useState("Arial");
@@ -38,19 +39,24 @@ function MakeAMeme() {
     setTitle(e.target.value)
   }
 
-  function getTextCoords() {
-    const imageBounds = imageRef.current.getBoundingClientRect();
-    const textBounds = textRef.current.getBoundingClientRect();
+  let leftPercentage;
+  let topPercentage;
 
-    const relativeX = textBounds.left - imageBounds.left;
-    const relativeY = textBounds.top - imageBounds.top;
+  function handleDragStop(data) {
+    console.log(data)
+    const containerWidth = containerRef.current.offsetWidth;
+    const containerHeight = containerRef.current.offsetHeight; 
 
-    return {x: relativeX, y: relativeY}
+    const leftPercentageX = (data.x / containerWidth) * 100;
+    const topPercentageY = (data.y / containerHeight) * 100;
+
+    leftPercentage = leftPercentageX;
+    console.log(leftPercentage)
+    topPercentage = topPercentageY;
   }
-
   function handleSubmit(e) {
     e.preventDefault()
-    const coords = getTextCoords();
+    
     const meme = {
         user_id: currentUser.id,
         cat_id: id,
@@ -59,8 +65,9 @@ function MakeAMeme() {
         font: selectedFont,
         font_color: color,
         font_size: fontSize, 
-        x_coord: coords.x,
-        y_coord: coords.y
+        left_percent: leftPercentage ? leftPercentage : '50%',
+        top_percent: topPercentage ? topPercentage : '50%',
+        photo_url: src
     };
     console.log(meme)
     fetch('/memes', {
@@ -81,16 +88,16 @@ function MakeAMeme() {
     <div className="container-flex bg-light">
       <div className="row justify-content-center">
         <h1 className="text-center">Make A Meme!</h1>
-        <div className="imageContainer text-center col-8">
+        <div className="imageContainer text-center col-8" ref={containerRef}>
           <img
             ref={imageRef}
             id="meme-maker-cat"
-            className="col-6 m-auto p-auto"
+            className="col-6"
             src={src}
             alt={name}
           />
           <br></br>
-          <Draggable className="" bounds=".imageContainer">
+          <Draggable onStop={(e, data) => handleDragStop(data)} className="" bounds=".imageContainer">
             <p
               ref={textRef}
               id="overlay-text"

@@ -26,7 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cats" element={<CatImages makeMeme={handleMakeMeme}/>} />
-          <Route path="/memes" element={<Memes />} />
+          <Route path="/me" element={<Memes />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cats/make-meme/:name" element={<MakeAMeme />} />

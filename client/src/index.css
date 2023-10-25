@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,13 +10,14 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
 
 
 .imageContainer {
   position:relative;
   display: inline-block;
   overflow: hidden;
+  object-fit: cover;
   
 }
 
@@ -26,7 +27,7 @@ code {
   left: 10%;
   word-wrap: break-word;
   white-space: pre-line;
-
+  
 }
 
 #meme-maker-cat {
