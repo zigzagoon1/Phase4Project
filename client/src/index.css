@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+#meme-maker-cat {
+  position:relative;
+}
+
+#overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  transform: translate(-45%, -50%);
+
+}
