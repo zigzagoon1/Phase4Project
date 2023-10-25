@@ -21,7 +21,7 @@ function CatImages(makeMeme) {
 
 
     const catImagesElement = cats.map((cat) => {
-        return <CatImageCard key={cat.id} name={cat.name} src={cat.photo_url} alt={cat.alt} makeMeme={makeMeme}/>
+        return <CatImageCard key={cat.id} id={cat.id} name={cat.name} src={cat.photo_url} alt={cat.alt} makeMeme={makeMeme}/>
     });
 
     return(

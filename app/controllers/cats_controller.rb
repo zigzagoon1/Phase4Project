@@ -5,7 +5,4 @@ class CatsController < ApplicationController
         render json: cats
     end
 
-    def show
-        
-    end
 end

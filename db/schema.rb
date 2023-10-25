@@ -30,6 +30,9 @@ ActiveRecord::Schema.define(version: 2023_10_20_162014) do
     t.string "content"
     t.string "font"
     t.string "font_color"
+    t.integer "font_size"
+    t.integer "x_coord"
+    t.integer "y_coord"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

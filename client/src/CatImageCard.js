@@ -2,11 +2,11 @@ import React from "react";
 import {Button, Card} from 'react-bootstrap';
 import MakeAMeme from "./MakeAMeme";
 import { useNavigate } from "react-router-dom";
-function CatImageCard({ name, src, alt, makeMeme }) {
+function CatImageCard({ id, name, src, alt, makeMeme }) {
     const nav = useNavigate();
     name = name.replace(/\s/g, '');
   function handleClick() {
-    nav(`make-meme/${name}`, {state: {name, src}});
+    nav(`make-meme/${name}`, {state: {id, name, src}});
   }
   return (
     <div className="row g-0">
