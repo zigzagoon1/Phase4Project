@@ -1,24 +1,27 @@
 import React, { useContext, useRef, useState } from "react";
-import {useLocation } from "react-router-dom";
-import Draggable from 'react-draggable';
+import { useLocation } from "react-router-dom";
+import Draggable from "react-draggable";
 import { Button } from "react-bootstrap";
 import { CurrentUserContext } from "./context/current_user";
 function MakeAMeme() {
   const location = useLocation();
 
-  const { id, name, src} = location.state;
+  const { id, name, src } = location.state;
 
   const imageRef = useRef(null);
+  const [imageRect, setImageRect] = useState(null);
   const textRef = useRef(null);
-  const containerRef = useRef(null);
+  const [textRect, setTextRect] = useState(null);
 
   const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [selectedFont, setSelectedFont] = useState("Arial");
   const [content, setContent] = useState("Your Text Here");
   const [color, setColor] = useState("#000000");
   const [fontSize, setFontSize] = useState(24);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
 
+  const [leftPercentage, setLeftPercentage] = useState("50%");
+  const [topPercentage, setTopPercentage] = useState("50%");
   function handleFontChange(e) {
     setSelectedFont(e.target.value);
   }
@@ -36,59 +39,74 @@ function MakeAMeme() {
   }
 
   function handleTitleChange(e) {
-    setTitle(e.target.value)
+    setTitle(e.target.value);
   }
-
-  let leftPercentage;
-  let topPercentage;
 
   function handleDragStop(data) {
-    console.log(data)
-    const containerWidth = containerRef.current.offsetWidth;
-    const containerHeight = containerRef.current.offsetHeight; 
+    console.log(data);
 
-    const leftPercentageX = (data.x / containerWidth) * 100;
-    const topPercentageY = (data.y / containerHeight) * 100;
+    setImageRect(imageRef.current.getBoundingClientRect());
+    setTextRect(textRef.current.getBoundingClientRect());
 
-    leftPercentage = leftPercentageX;
-    console.log(leftPercentage)
-    topPercentage = topPercentageY;
+    let leftPercentageX;
+    let topPercentageY;
+
+    if (imageRect && textRect) {
+        leftPercentageX = ((textRect.left - imageRect.left) / imageRect.width)* 100;
+        topPercentageY = ((textRect.top - imageRect.top) / imageRect.height) * 100;
+        setLeftPercentage(leftPercentageX);
+        setTopPercentage(topPercentageY);
+    }
+
+    else {
+        return;
+    }
+
+
+
+    console.log("width= ", '400');
+    console.log("height= ", '400');
+    console.log("left= ", leftPercentageX);
+    console.log("top= ", topPercentageY);
+    console.log("datax= ", data.x);
+    console.log("datay= ", data.y);
+
+
   }
   function handleSubmit(e) {
-    e.preventDefault()
-    
-    const meme = {
-        user_id: currentUser.id,
-        cat_id: id,
-        title: title,
-        content: content,
-        font: selectedFont,
-        font_color: color,
-        font_size: fontSize, 
-        left_percent: leftPercentage ? leftPercentage : '50%',
-        top_percent: topPercentage ? topPercentage : '50%',
-        photo_url: src
-    };
-    console.log(meme)
-    fetch('/memes', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(meme)
-    })
-    .then(r => r.json())
-    .then((newMeme) => {
-        console.log(newMeme)
-    })
+    e.preventDefault();
 
+    const meme = {
+      user_id: currentUser.id,
+      cat_id: id,
+      title: title,
+      content: content,
+      font: selectedFont,
+      font_color: color,
+      font_size: fontSize,
+      left_percent: leftPercentage,
+      top_percent: topPercentage,
+      photo_url: src,
+    };
+    console.log(meme);
+    fetch("/memes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(meme),
+    })
+      .then((r) => r.json())
+      .then((newMeme) => {
+        console.log(newMeme);
+      });
   }
 
   return (
     <div className="container-flex bg-light">
       <div className="row justify-content-center">
         <h1 className="text-center">Make A Meme!</h1>
-        <div className="imageContainer text-center col-8" ref={containerRef}>
+        <div className="imageContainer col-8 p-0">
           <img
             ref={imageRef}
             id="meme-maker-cat"
@@ -97,11 +115,15 @@ function MakeAMeme() {
             alt={name}
           />
           <br></br>
-          <Draggable onStop={(e, data) => handleDragStop(data)} className="" bounds=".imageContainer">
+          <Draggable
+            onStop={(e, data) => handleDragStop(data)}
+            className=""
+            bounds=".imageContainer"
+          >
             <p
               ref={textRef}
-              id="overlay-text"
-              className=""
+              id="overlay-text "
+              className="make-a-meme m-0"
               style={{
                 fontFamily: selectedFont,
                 color: color,
@@ -113,16 +135,20 @@ function MakeAMeme() {
             </p>
           </Draggable>
         </div>
+        <div className="text-center">
         <textarea
           className="col-6"
           onChange={handleContentChange}
           placeholder="Type meme content here..."
         ></textarea>
+        </div>
       </div>
       <form onSubmit={handleSubmit} className="text-center">
         <br></br>
-        <label className="" htmlFor="title">Choose A Title</label>
-        <input type='text' onChange={handleTitleChange}></input>
+        <label className="" htmlFor="title">
+          Choose A Title
+        </label>
+        <input type="text" onChange={handleTitleChange}></input>
         <br></br>
         <label className="my-3 col-2" htmlFor="font">
           Select Your Font:
@@ -170,6 +196,5 @@ function MakeAMeme() {
     </div>
   );
 }
-
 
 export default MakeAMeme;

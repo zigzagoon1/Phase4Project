@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
     before_action :authorize, only: [:show, :update, :destroy]
-rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_response
     def index
         users = User.all
         render json: users
@@ -11,18 +10,24 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_response
         render json: user, include: [:cats, :memes]
     end
 
+    # def create
+    #     user = User.create!(user_create_params)
+    #     if user.valid?
+    #         session[:user_id] = user.id
+    #         render json: user, status: :created
+    #     else
+    #         render json: {errors: user.errors.full_messages}, status: :unprocessable_entity
+    #     end
+    # end
     def create
         user = User.create!(user_create_params)
-        if !User.find_by(username: user.username)
-            if user.valid?
-                session[:user_id] = user.id
-                render json: user, status: :created
-            else
-                render json: {errors: user.errors.full_messages}, status: :unprocessable_entity
-            end
+        if user.valid?
+            session[:user_id] = user.id
+            render json: user, status: :created
         else
-            render json: {error: "Username already exists"}, status: :unprocessable_entity
+            render json: {errors: user.errors.full_messages}, status: :unprocessable_entity
         end
+
     end
 
     def update
@@ -36,6 +41,7 @@ rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_response
     private
 
     def user_create_params
+        puts params.inspect
         params.permit(:name, :username, :password, :password_confirmation)
     end
 

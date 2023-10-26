@@ -18,8 +18,8 @@ function Memes() {
         />
     })
     return(
-        <div className="text-center">
-            <h1>My Memes</h1>
+        <div className="">
+            <h1 className="text-center">My Memes</h1>
             <br></br>
             {memeElements}
         </div>

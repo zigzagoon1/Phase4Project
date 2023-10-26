@@ -6,11 +6,11 @@ function MemeCard({title, photoURL, content, font, fontColor, fontSize, leftPerc
     <div className="container-flex">
       <div className="row justify-content-center">
         <div
-          className="imageContainer text-center col-8"
+          className="imageContainer col-8 p-0"
         >
           <img id="meme-maker-cat" className="col-6" src={photoURL} alt={title} />
           <p 
-            className="content"
+            className="content m-auto"
             style={{
               position: "absolute",
               fontFamily: font,

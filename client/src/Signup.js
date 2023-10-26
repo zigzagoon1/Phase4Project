@@ -26,14 +26,15 @@ function Signup() {
             password: values.password,
             password_confirmation: values.password_confirmation,
         }
-        
+        console.log(newUser)
         fetch('/signup', {
             method: "POST",
             headers: {
-                "Content-Type" : 'application/json',
+                "Content-Type": 'application/json',
             }, 
             body: JSON.stringify(newUser),
-        }).then(r => {
+        })
+        .then(r => {
             if (r.ok) {
                 r.json().then((createdUser) => {
                     console.log(createdUser)
@@ -41,7 +42,8 @@ function Signup() {
                 })
             }
             else {
-                alert('Username is already taken! Try another one.');
+                //alert('Username is already taken! Try another one.');
+                console.log(r)
             }
         })
 
