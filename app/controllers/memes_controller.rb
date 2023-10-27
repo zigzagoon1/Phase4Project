@@ -6,6 +6,10 @@ before_action :authorize, only: [:create]
         render json: memes
     end
 
+    def show
+        meme = Meme.find_by(id: params[:id])
+        render json: meme, status: :ok
+    end
 
     def create
         meme = Meme.create!(new_meme_params)
@@ -18,7 +22,7 @@ before_action :authorize, only: [:create]
     end
 
     def update
-        meme = Meme.find(id: params[:id])
+        meme = Meme.find_by(id: params[:id])
         meme.update(update_params)
         render json: meme, status: :ok
     end
