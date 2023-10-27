@@ -31,21 +31,14 @@ function MakeAMeme() {
     topPercent: '50%'
   }
 
-  // const [src, setSrc] = useState('');
-  // const [id, setId] = useState('');
-  // if (path.includes('/make-meme')) {
-  //   setId(location.state.id);
-  //   setSrc(location.state.src);
-  //   console.log()
-  // }
-
-
   const [meme, setMeme] = useState(initialMemeState);
 
   const imageRef = useRef(null);
   const [imageRect, setImageRect] = useState(null);
   const textRef = useRef(null);
   const [textRect, setTextRect] = useState(null);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+
 
   useEffect(() => {
     if (imageRef.current !== null && textRef.current !== null) {
@@ -55,11 +48,6 @@ function MakeAMeme() {
 
   }, [imageRef, textRef])
 
-
-
-  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
-
- 
 
   function handleValueChange(e) {
     const {name, value} = e.target;
@@ -72,8 +60,8 @@ function MakeAMeme() {
     let leftPercentageX;
     let topPercentageY;
 
-    // setTextRect(textRef.current.getBoundingClientRect())
-    // setImageRect(imageRef.current.getBoundingClientRect())
+    setTextRect(textRef.current.getBoundingClientRect())
+    setImageRect(imageRef.current.getBoundingClientRect())
 
     if (imageRect && textRect) {
         leftPercentageX = ((textRect.left - imageRect.left + data.x) / imageRect.width)* 100;
@@ -84,8 +72,6 @@ function MakeAMeme() {
     else {
         return;
     }
-    // console.log("width= ", '400');
-    // console.log("height= ", '400');
     console.log("left= ", leftPercentageX);
     console.log("top= ", topPercentageY);
     console.log("datax= ", data.x);
@@ -107,7 +93,22 @@ function MakeAMeme() {
         top_percent: meme.topPercent
       }
 
-      console.log(params)
+      fetch(`/memes/${params.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedMeme),
+      })
+      .then((r) => {
+        if (r.ok) {
+          r.json()
+          .then((updated) => {
+            console.log(updated)
+
+          })
+        }
+      })
 
     }
     else {
@@ -220,7 +221,6 @@ function MakeAMeme() {
         </label>
         <select
           className="col-1"
-          defaultValue={24}
           value={meme.fontSize}
           onChange={handleValueChange}
           name="fontSize"
