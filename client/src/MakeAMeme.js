@@ -193,7 +193,7 @@ function MakeAMeme() {
         <label className="my-3 col-2" htmlFor="font">
           Select Your Font:
         </label>
-        <select onChange={handleValueChange} name="selectedFont">
+        <select onChange={handleValueChange} name="selectedFont" value={meme.selectedFont}>
           <option value="Arial">Arial</option>
           <option value="Courier New">Courier New</option>
           <option value="Times New Roman">Times New Roman</option>
@@ -203,7 +203,7 @@ function MakeAMeme() {
         </select>
         <br></br>
         <label className=" col-1 my-5">Color:</label>
-        <select className="col-2" onChange={handleValueChange} name="fontColor">
+        <select className="col-2" onChange={handleValueChange} name="fontColor" value={meme.fontColor}>
           <option value="black">Black</option>
           <option value="red">Red</option>
           <option value="blue">Blue</option>
@@ -221,6 +221,7 @@ function MakeAMeme() {
         <select
           className="col-1"
           defaultValue={24}
+          value={meme.fontSize}
           onChange={handleValueChange}
           name="fontSize"
         >
