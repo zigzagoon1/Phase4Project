@@ -24,7 +24,7 @@ before_action :authorize, only: [:create]
     end
 
     def destroy
-        meme = Meme.find(params[:id])
+        meme = Meme.find_by(id: params[:id])
         meme.destroy
         head :no_content
     end
@@ -32,11 +32,11 @@ before_action :authorize, only: [:create]
     private
     
     def new_meme_params
-        params.permit(:user_id, :cat_id, :title, :content, :font, :font_color, :font_size, :top_percent, :left_percent, :photo_url)
+        params.permit(:user_id, :cat_id, :title, :content, :font, :font_color, :font_size, :text_top, :text_left, :photo_url)
     end
 
     def update_params
-        params.permit(:title, :content, :font, :font_color, :font_size, :top_percent, :left_percent)
+        params.permit(:title, :content, :font, :font_color, :font_size, :text_top, :text_left)
     end
 
     def authorize

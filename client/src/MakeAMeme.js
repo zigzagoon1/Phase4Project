@@ -8,6 +8,7 @@ function MakeAMeme() {
   const path = location.pathname;
   const params = location.state;
 
+
   const initialMemeState = path.includes('/edit') ? 
   {
     title: params.title,
@@ -27,12 +28,11 @@ function MakeAMeme() {
     selectedFont: 'Arial',
     fontSize: 24,
     fontColor: 'black',
-    textLeft: '50%',
-    textTop: '50%'
+    textLeft: 50,
+    textTop: 50
   }
 
   const [meme, setMeme] = useState(initialMemeState);
-
   const imageRef = useRef(null);
   const [imageRect, setImageRect] = useState(null);
   const textRef = useRef(null);
@@ -54,7 +54,25 @@ function MakeAMeme() {
     setMeme(prevMeme => ({...prevMeme, [name]: value,
     }))
   }
-
+  // function handleDragStop(data) {
+  //   if (imageRef.current) {
+  //     // Extracting the top and left position of the image.
+  //     const imageTop = imageRef.current.offsetTop;
+  //     const imageLeft = imageRef.current.offsetLeft;
+  
+  //     // Calculating the position of the text relative to the image.
+  //     const relativeTextLeft = data.lastX - imageLeft;
+  //     const relativeTextTop = data.lastY - imageTop;
+  
+  //     // Setting the state with the relative positions.
+  //     setMeme({
+  //       ...meme,
+  //       textLeft: relativeTextLeft,
+  //       textTop: relativeTextTop,
+  //     });
+  //   }
+    
+  // }
   function handleDragStop(data) {
 
     let textLeftX;
@@ -72,17 +90,15 @@ function MakeAMeme() {
     else {
         return;
     }
-    console.log("left= ", textLeftX);
-    console.log("top= ", textTopY);
-    console.log("datax= ", data.x);
-    console.log("datay= ", data.y);
+
   }
 
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (path.includes('/edit')) {
+    if (path.includes('/memes/edit')) {
+      console.log('here in edit mode');
       const updatedMeme = {
         title: meme.title,
         content: meme.content,
@@ -112,6 +128,7 @@ function MakeAMeme() {
 
     }
     else {
+      console.log('here in create mode')
       const newMeme = {
         user_id: currentUser.id,
         cat_id: params.id,
