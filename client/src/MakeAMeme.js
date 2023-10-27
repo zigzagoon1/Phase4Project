@@ -16,8 +16,8 @@ function MakeAMeme() {
     selectedFont: params.font,
     fontSize: params.fontSize,
     fontColor: params.fontColor,
-    leftPercent: params.leftPercent,
-    topPercent: params.topPercent
+    textLeft: params.textLeft,
+    textTop: params.textTop
   }
   :
   {
@@ -27,8 +27,8 @@ function MakeAMeme() {
     selectedFont: 'Arial',
     fontSize: 24,
     fontColor: 'black',
-    leftPercent: '50%',
-    topPercent: '50%'
+    textLeft: '50%',
+    textTop: '50%'
   }
 
   const [meme, setMeme] = useState(initialMemeState);
@@ -57,23 +57,23 @@ function MakeAMeme() {
 
   function handleDragStop(data) {
 
-    let leftPercentageX;
-    let topPercentageY;
+    let textLeftX;
+    let textTopY;
 
     setTextRect(textRef.current.getBoundingClientRect())
     setImageRect(imageRef.current.getBoundingClientRect())
 
     if (imageRect && textRect) {
-        leftPercentageX = ((textRect.left - imageRect.left + data.x) / imageRect.width)* 100;
-        topPercentageY = ((textRect.top - imageRect.top + data.y) / imageRect.height) * 100;
-        setMeme({...meme, leftPercent: leftPercentageX, topPercent: topPercentageY});
+        textLeftX = ((textRect.left - imageRect.left + data.x) / imageRect.width)* 100;
+        textTopY = ((textRect.top - imageRect.top + data.y) / imageRect.height) * 100;
+        setMeme({...meme, textLeft: textLeftX, textTop: textTopY});
     }
 
     else {
         return;
     }
-    console.log("left= ", leftPercentageX);
-    console.log("top= ", topPercentageY);
+    console.log("left= ", textLeftX);
+    console.log("top= ", textTopY);
     console.log("datax= ", data.x);
     console.log("datay= ", data.y);
   }
@@ -89,8 +89,8 @@ function MakeAMeme() {
         font: meme.selectedFont,
         font_color: meme.fontColor,
         font_size: meme.fontSize,
-        left_percent: meme.leftPercent,
-        top_percent: meme.topPercent
+        text_left: meme.textLeft,
+        text_top: meme.textTop
       }
 
       fetch(`/memes/${params.id}`, {
@@ -120,8 +120,8 @@ function MakeAMeme() {
         font: meme.selectedFont,
         font_color: meme.fontColor,
         font_size: meme.fontSize,
-        left_percent: meme.leftPercent,
-        top_percent: meme.topPercent,
+        text_left: meme.textLeft,
+        text_top: meme.textTop,
         photo_url: meme.photoURL,
       };
       console.log(newMeme);
@@ -165,9 +165,7 @@ function MakeAMeme() {
               style={{
                 fontFamily: meme.selectedFont,
                 color: meme.fontColor,
-                fontSize: `${meme.fontSize}px`,
-                top: meme.topPercent,
-                left: meme.leftPercent
+                fontSize: `${meme.fontSize}px`
               }}
               placeholder=""
             >

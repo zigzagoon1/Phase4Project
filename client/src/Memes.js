@@ -13,7 +13,7 @@ function Memes() {
 
     const memeElements = memes.map((meme) => {
         return <MemeCard key={meme.id} id={meme.id} catId={meme.cat_id} userId={meme.user_id} title={meme.title} photoURL={meme.photo_url} content={meme.content} font={meme.font} fontColor={meme.font_color} fontSize = {meme.font_size}
-            leftPercent={meme.left_percent} topPercent={meme.top_percent}
+            textLeft={meme.text_left} textTop={meme.text_top}
         />
     })
     return(

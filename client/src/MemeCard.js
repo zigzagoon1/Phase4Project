@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-function MemeCard({id, catId, userId, title, photoURL, content, font, fontColor, fontSize, leftPercent, topPercent}) {
+function MemeCard({id, catId, userId, title, photoURL, content, font, fontColor, fontSize, textLeft, textTop}) {
     const nav = useNavigate();
   const [cardVisible, setCardVisible] = useState(true);
 
     function handleEdit() {
-      nav(`/memes/edit/${id}`, {state: {id, catId, userId, title, photoURL, content, font, fontColor, fontSize, leftPercent, topPercent}})
+      nav(`/memes/edit/${id}`, {state: {id, catId, userId, title, photoURL, content, font, fontColor, fontSize, textLeft, textTop}})
     }
 
     function handleDelete() {
@@ -36,8 +36,8 @@ function MemeCard({id, catId, userId, title, photoURL, content, font, fontColor,
               fontFamily: font,
               color: fontColor,
               fontSize: fontSize,
-              top: `${topPercent}%`,
-              left: `${leftPercent}%`,
+              top: `${textTop}%`,
+              left: `${textLeft}%`,
             }}
           >
             {content}
