@@ -30,6 +30,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cats/make-meme/:name" element={<MakeAMeme />} />
+          <Route path="/memes/edit/:id" element={<MakeAMeme />} />
         </Routes>
       </div>
     </div>

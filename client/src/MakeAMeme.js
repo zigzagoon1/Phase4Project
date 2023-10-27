@@ -1,105 +1,142 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Draggable from "react-draggable";
 import { Button } from "react-bootstrap";
 import { CurrentUserContext } from "./context/current_user";
 function MakeAMeme() {
   const location = useLocation();
+  const path = location.pathname;
+  const params = location.state;
 
-  const { id, name, src } = location.state;
+  const initialMemeState = path.includes('/edit') ? 
+  {
+    title: params.title,
+    photoURL: params.photoURL,
+    content: params.content,
+    selectedFont: params.font,
+    fontSize: params.fontSize,
+    fontColor: params.fontColor,
+    leftPercent: params.leftPercent,
+    topPercent: params.topPercent
+  }
+  :
+  {
+    title: '',
+    photoURL: location.state.src,
+    content: 'Your Text Here',
+    selectedFont: 'Arial',
+    fontSize: 24,
+    fontColor: 'black',
+    leftPercent: '50%',
+    topPercent: '50%'
+  }
+
+  // const [src, setSrc] = useState('');
+  // const [id, setId] = useState('');
+  // if (path.includes('/make-meme')) {
+  //   setId(location.state.id);
+  //   setSrc(location.state.src);
+  //   console.log()
+  // }
+
+
+  const [meme, setMeme] = useState(initialMemeState);
 
   const imageRef = useRef(null);
   const [imageRect, setImageRect] = useState(null);
   const textRef = useRef(null);
   const [textRect, setTextRect] = useState(null);
 
+  useEffect(() => {
+    if (imageRef.current !== null && textRef.current !== null) {
+      setImageRect(imageRef.current.getBoundingClientRect());
+      setTextRect(textRef.current.getBoundingClientRect());
+    }
+
+  }, [imageRef, textRef])
+
+
+
   const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
-  const [selectedFont, setSelectedFont] = useState("Arial");
-  const [content, setContent] = useState("Your Text Here");
-  const [color, setColor] = useState("#000000");
-  const [fontSize, setFontSize] = useState(24);
-  const [title, setTitle] = useState("");
 
-  const [leftPercentage, setLeftPercentage] = useState("50%");
-  const [topPercentage, setTopPercentage] = useState("50%");
-  function handleFontChange(e) {
-    setSelectedFont(e.target.value);
-  }
+ 
 
-  function handleContentChange(e) {
-    setContent(e.target.value);
-  }
-
-  function handleColorChange(e) {
-    setColor(e.target.value);
-  }
-
-  function handleFontSizeChange(e) {
-    setFontSize(parseInt(e.target.value));
-  }
-
-  function handleTitleChange(e) {
-    setTitle(e.target.value);
+  function handleValueChange(e) {
+    const {name, value} = e.target;
+    setMeme(prevMeme => ({...prevMeme, [name]: value,
+    }))
   }
 
   function handleDragStop(data) {
-    console.log(data);
-
-    setImageRect(imageRef.current.getBoundingClientRect());
-    setTextRect(textRef.current.getBoundingClientRect());
 
     let leftPercentageX;
     let topPercentageY;
 
+    // setTextRect(textRef.current.getBoundingClientRect())
+    // setImageRect(imageRef.current.getBoundingClientRect())
+
     if (imageRect && textRect) {
-        leftPercentageX = ((textRect.left - imageRect.left) / imageRect.width)* 100;
-        topPercentageY = ((textRect.top - imageRect.top) / imageRect.height) * 100;
-        setLeftPercentage(leftPercentageX);
-        setTopPercentage(topPercentageY);
+        leftPercentageX = ((textRect.left - imageRect.left + data.x) / imageRect.width)* 100;
+        topPercentageY = ((textRect.top - imageRect.top + data.y) / imageRect.height) * 100;
+        setMeme({...meme, leftPercent: leftPercentageX, topPercent: topPercentageY});
     }
 
     else {
         return;
     }
-
-
-
-    console.log("width= ", '400');
-    console.log("height= ", '400');
+    // console.log("width= ", '400');
+    // console.log("height= ", '400');
     console.log("left= ", leftPercentageX);
     console.log("top= ", topPercentageY);
     console.log("datax= ", data.x);
     console.log("datay= ", data.y);
-
-
   }
+
+
   function handleSubmit(e) {
     e.preventDefault();
 
-    const meme = {
-      user_id: currentUser.id,
-      cat_id: id,
-      title: title,
-      content: content,
-      font: selectedFont,
-      font_color: color,
-      font_size: fontSize,
-      left_percent: leftPercentage,
-      top_percent: topPercentage,
-      photo_url: src,
-    };
-    console.log(meme);
-    fetch("/memes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(meme),
-    })
-      .then((r) => r.json())
-      .then((newMeme) => {
-        console.log(newMeme);
-      });
+    if (path.includes('/edit')) {
+      const updatedMeme = {
+        title: meme.title,
+        content: meme.content,
+        font: meme.selectedFont,
+        font_color: meme.fontColor,
+        font_size: meme.fontSize,
+        left_percent: meme.leftPercent,
+        top_percent: meme.topPercent
+      }
+
+      console.log(params)
+
+    }
+    else {
+      const newMeme = {
+        user_id: currentUser.id,
+        cat_id: params.id,
+        title: meme.title,
+        content: meme.content,
+        font: meme.selectedFont,
+        font_color: meme.fontColor,
+        font_size: meme.fontSize,
+        left_percent: meme.leftPercent,
+        top_percent: meme.topPercent,
+        photo_url: meme.photoURL,
+      };
+      console.log(newMeme);
+      fetch("/memes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMeme),
+      })
+        .then((r) => r.json())
+        .then((memeR) => {
+          console.log(memeR);
+        });
+    }
+
   }
 
   return (
@@ -111,8 +148,8 @@ function MakeAMeme() {
             ref={imageRef}
             id="meme-maker-cat"
             className="col-6"
-            src={src}
-            alt={name}
+            src={meme.photoURL}
+            alt={meme.title}
           />
           <br></br>
           <Draggable
@@ -125,20 +162,23 @@ function MakeAMeme() {
               id="overlay-text "
               className="make-a-meme m-0"
               style={{
-                fontFamily: selectedFont,
-                color: color,
-                fontSize: fontSize,
+                fontFamily: meme.selectedFont,
+                color: meme.fontColor,
+                fontSize: `${meme.fontSize}px`,
+                top: meme.topPercent,
+                left: meme.leftPercent
               }}
               placeholder=""
             >
-              {content}
+              {meme.content}
             </p>
           </Draggable>
         </div>
         <div className="text-center">
         <textarea
+          name="content"
           className="col-6"
-          onChange={handleContentChange}
+          onChange={handleValueChange}
           placeholder="Type meme content here..."
         ></textarea>
         </div>
@@ -148,12 +188,12 @@ function MakeAMeme() {
         <label className="" htmlFor="title">
           Choose A Title
         </label>
-        <input type="text" onChange={handleTitleChange}></input>
+        <input type="text" name="title" onChange={handleValueChange} value={meme.title}></input>
         <br></br>
         <label className="my-3 col-2" htmlFor="font">
           Select Your Font:
         </label>
-        <select onChange={handleFontChange}>
+        <select onChange={handleValueChange} name="selectedFont">
           <option value="Arial">Arial</option>
           <option value="Courier New">Courier New</option>
           <option value="Times New Roman">Times New Roman</option>
@@ -163,7 +203,7 @@ function MakeAMeme() {
         </select>
         <br></br>
         <label className=" col-1 my-5">Color:</label>
-        <select className="col-2" onChange={handleColorChange}>
+        <select className="col-2" onChange={handleValueChange} name="fontColor">
           <option value="black">Black</option>
           <option value="red">Red</option>
           <option value="blue">Blue</option>
@@ -175,13 +215,14 @@ function MakeAMeme() {
           <option value="yellow">Yellow</option>
         </select>
         <br></br>
-        <label className="col-2" onChange={handleFontSizeChange}>
+        <label className="col-2" onChange={handleValueChange}>
           Font Size:
         </label>
         <select
           className="col-1"
           defaultValue={24}
-          onChange={handleFontSizeChange}
+          onChange={handleValueChange}
+          name="fontSize"
         >
           <option value="38">38</option>
           <option value="30">30</option>

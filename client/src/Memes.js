@@ -7,13 +7,12 @@ function Memes() {
         fetch('/me')
         .then(res => res.json())
         .then((user) => {
-            console.log(user)
             setMemes(user.memes)
         })
     }, [])
 
     const memeElements = memes.map((meme) => {
-        return <MemeCard key={meme.id} title={meme.title} photoURL={meme.photo_url} content={meme.content} font={meme.font} fontColor={meme.font_color} fontSize = {meme.font_size}
+        return <MemeCard key={meme.id} id={meme.id} catId={meme.cat_id} userId={meme.user_id} title={meme.title} photoURL={meme.photo_url} content={meme.content} font={meme.font} fontColor={meme.font_color} fontSize = {meme.font_size}
             leftPercent={meme.left_percent} topPercent={meme.top_percent}
         />
     })
