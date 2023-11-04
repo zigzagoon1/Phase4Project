@@ -8,7 +8,9 @@ function Login() {
     }
 
     const [values, setValues] = useState(defaultvalues);
-    const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+    const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
+    const [message, setMessage] = useState('');
+    const [showMessage, setShowMessage] = useState(false);
 
     const formDiv = 
     <div>
@@ -44,7 +46,13 @@ function Login() {
                     r.json()
                     .then((user) => {
                         setCurrentUser(user);
+                        setShowMessage(true);
+                        setMessage('Login successful!');
                     })
+                }
+                else {
+                    setShowMessage(true)
+                    setMessage("Login unsuccessful. Please check your username and password and try again.")
                 }
             })
         }
@@ -56,9 +64,9 @@ function Login() {
     }
 
 
-    return( !currentUser ? formDiv : 
+    return( !showMessage ? formDiv : 
         <div className="justify-content-center">
-            <p className="text-center">Login successful!</p>
+            <p className="text-center">{message}</p>
         </div>
     )
 }

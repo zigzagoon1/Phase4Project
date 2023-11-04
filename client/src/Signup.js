@@ -10,7 +10,7 @@ function Signup() {
     };
 
     const [values, setValues] = useState(defaultValues);
-    const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+    const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
 
     const signupCompleteDiv = 
     <div id="sign-up-complete" className="container-flex text-center">

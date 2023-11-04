@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect} from "react";
 import { NavLink } from "react-router-dom";
 import { CurrentUserContext } from "./context/current_user";
+import { Button } from "react-bootstrap";
 
 function Home() {
-  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+  const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
   const noCurrentUser = (
     <div className="container bg-light text-center py-5">
       <div className="row justify-content-center">
@@ -19,12 +20,23 @@ function Home() {
     </div>
   );
 
+
+  function handleLogout() {
+    fetch('/logout', {
+      method: "DELETE",
+    })
+    .then(() => {
+      setCurrentUser(null)
+    })
+  }
+
   return !currentUser ? (
     noCurrentUser
   ) : (
     <div className="container bg-light text-center py-5">
-      <div className="row">
+      <div className="row justify-content-center">
         <h4>Welcome, {currentUser.username}!</h4>
+        <Button className="col-3" onClick={handleLogout}>Logout</Button>
       </div>
     </div>
   );

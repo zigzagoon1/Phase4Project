@@ -1,6 +1,5 @@
 import React from "react";
 import {Button, Card} from 'react-bootstrap';
-import MakeAMeme from "./MakeAMeme";
 import { useNavigate } from "react-router-dom";
 function CatImageCard({ id, name, src, alt, makeMeme }) {
     const nav = useNavigate();

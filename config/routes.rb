@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   
   resources :users
-  resources :cats, only: [:index, :show]
+  resources :cats, only: [:index, :show, :create]
   resources :memes
 
   get '/me', to: 'users#show'

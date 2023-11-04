@@ -37,7 +37,7 @@ function MakeAMeme() {
   const [imageRect, setImageRect] = useState(null);
   const textRef = useRef(null);
   const [textRect, setTextRect] = useState(null);
-  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+  const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
 
 
   useEffect(() => {
