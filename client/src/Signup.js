@@ -42,7 +42,7 @@ function Signup() {
                 })
             }
             else {
-                //alert('Username is already taken! Try another one.');
+                alert('Please be sure to fill in every line to create an account. Note that the username may already be taken, so try a new one if it is not working.');
                 console.log(r)
             }
         })

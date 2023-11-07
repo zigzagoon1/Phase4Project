@@ -47,9 +47,8 @@ function CatImageCard({ id, name, src, alt, makeMeme }) {
           <img className="mb-3 col-6 col-sm-3 " src={src} alt={alt} />
           <br></br>
           <div className="">
-          <OverlayTrigger trigger="hover" placement="top" overlay={tooltip}>
             {button}
-          </OverlayTrigger>
+
           </div>
         </div>
       </Card>
