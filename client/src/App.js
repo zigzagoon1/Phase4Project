@@ -21,7 +21,7 @@ function App() {
         return r.json()
       }
       else {
-        throw r;
+        console.log(r);
       }
     })
         .then((user) => {
