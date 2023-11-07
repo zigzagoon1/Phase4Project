@@ -11,4 +11,4 @@ Cat.create(name: 'Happy Orange Kitty', photo_url: 'https://hips.hearstapps.com/h
 Cat.create(name: 'Jumping Cat', photo_url: 'https://cdn.theatlantic.com/thumbor/viW9N1IQLbCrJ0HMtPRvXPXShkU=/0x131:2555x1568/976x549/media/img/mt/2017/06/shutterstock_319985324/original.jpg', alt: 'Jumping Cat')
 Cat.create(name: 'Meowing Cat', photo_url: 'https://www.treehugger.com/thmb/_fPHERNCmPBwsZkCq5GEG3giqTs=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-593450425-5176c57c7b77417f9dd01dfb43827e7b.jpg', alt: 'Meowing Cat')
 
-User.create(name: "Kelly", username: "zigzag", password: "greenday", password_confirmation: "greenday")
+#User.create(name: "Kelly", username: "zigzag", password: "greenday", password_confirmation: "greenday")
