@@ -27,9 +27,7 @@ function App() {
         .then((user) => {
           if (user && !currentUser) {
             if (isMounted) {
-              console.log(user)
               setCurrentUser(user);
-              console.log(currentUser);
             }
 
           }
@@ -39,9 +37,6 @@ function App() {
         }
       }, [setCurrentUser])
 
-      useEffect(()=> {
-        console.log(currentUser);
-      }, [currentUser])
 
 
   function handleMakeMeme(imgName, imgSrc) {

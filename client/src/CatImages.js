@@ -12,7 +12,6 @@ function CatImages(makeMeme) {
             if (r.ok) {
                 r.json() 
                 .then((cats) => {
-                    console.log(cats)
                     setCats(cats)
                 })
             }

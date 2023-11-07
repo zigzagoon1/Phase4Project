@@ -38,6 +38,7 @@ function MakeAMeme() {
   const textRef = useRef(null);
   const [textRect, setTextRect] = useState(null);
   const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
+  const [titleMissing, setTitleMissing] = useState(false);
 
 
   useEffect(() => {
@@ -54,25 +55,7 @@ function MakeAMeme() {
     setMeme(prevMeme => ({...prevMeme, [name]: value,
     }))
   }
-  // function handleDragStop(data) {
-  //   if (imageRef.current) {
-  //     // Extracting the top and left position of the image.
-  //     const imageTop = imageRef.current.offsetTop;
-  //     const imageLeft = imageRef.current.offsetLeft;
-  
-  //     // Calculating the position of the text relative to the image.
-  //     const relativeTextLeft = data.lastX - imageLeft;
-  //     const relativeTextTop = data.lastY - imageTop;
-  
-  //     // Setting the state with the relative positions.
-  //     setMeme({
-  //       ...meme,
-  //       textLeft: relativeTextLeft,
-  //       textTop: relativeTextTop,
-  //     });
-  //   }
-    
-  // }
+
   function handleDragStop(data) {
 
     let textLeftX;
@@ -95,10 +78,12 @@ function MakeAMeme() {
 
 
   function handleSubmit(e) {
+    if (meme.title === '') {
+      setTitleMissing(true);
+    }
     e.preventDefault();
 
     if (path.includes('/memes/edit')) {
-      console.log('here in edit mode');
       const updatedMeme = {
         title: meme.title,
         content: meme.content,
@@ -121,14 +106,13 @@ function MakeAMeme() {
           r.json()
           .then((updated) => {
             console.log(updated)
-
+            onSaveComplete()
           })
         }
       })
 
     }
     else {
-      console.log('here in create mode')
       const newMeme = {
         user_id: currentUser.id,
         cat_id: params.id,
@@ -152,13 +136,22 @@ function MakeAMeme() {
         .then((r) => r.json())
         .then((memeR) => {
           console.log(memeR);
+          onSaveComplete()
         });
     }
-
   }
 
-  return (
+  function onSaveComplete() {
+    const meme = document.getElementById('meme-section');
+    const save = document.getElementById('save-complete');
+
+    meme.style.display = 'none';
+    save.style.display = 'block';
+  }
+
+  return ( 
     <div className="container-flex bg-light">
+      <div id="meme-section">
       <div className="row justify-content-center">
         <h1 className="text-center">Make A Meme!</h1>
         <div className="imageContainer col-8 p-0">
@@ -202,10 +195,11 @@ function MakeAMeme() {
       <form onSubmit={handleSubmit} className="text-center">
         <br></br>
         <label className="" htmlFor="title">
-          Choose A Title
+          Choose A Title*
         </label>
         <input type="text" name="title" onChange={handleValueChange} value={meme.title}></input>
-        <br></br>
+        <br></br> 
+        {titleMissing ? <p>Title must be included in order to save your meme.</p> : <p></p>}
         <label className="my-3 col-2" htmlFor="font">
           Select Your Font:
         </label>
@@ -250,6 +244,10 @@ function MakeAMeme() {
         <br></br>
         <Button type="submit">Save</Button>
       </form>
+      </div>
+      <div id="save-complete" style={{display: 'none'}} className="text-center fw-bold fs-4">
+         <p>Save complete!</p>
+      </div>
     </div>
   );
 }

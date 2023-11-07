@@ -9,8 +9,6 @@ function MemeCard({id, catId, userId, title, photoURL, content, font, fontColor,
       nav(`/memes/edit/${id}`, {state: {id, catId, userId, title, photoURL, content, font, fontColor, fontSize, textLeft, textTop}})
     }
 
-    console.log(textLeft)
-
     function handleDelete() {
       fetch(`/memes/${id}`, {
         method: "DELETE",
